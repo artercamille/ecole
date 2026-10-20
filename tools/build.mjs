@@ -9,7 +9,7 @@ const body = html.slice(html.indexOf("<body>") + 6, html.indexOf("<script src"))
 const bundle = JSON.stringify({
   v: 1, body,
   css: readFileSync(src + "/css/app.css", "utf8"),
-  js: ["js/lessons.js", "js/questions.js", "js/app.js"].map(f => readFileSync(src + "/" + f, "utf8"))
+  js: ["js/lessons.js", "js/questions.js", "js/annales.js", "js/app.js"].map(f => readFileSync(src + "/" + f, "utf8"))
 });
 // on garde le même sel d'une version à l'autre : le téléphone n'a pas à retaper le mot de passe
 const salt = existsSync("app.enc") ? new Uint8Array(Buffer.from(readFileSync("app.enc", "utf8"), "base64").subarray(0, 16)) : C.getRandomValues(new Uint8Array(16)), iv = C.getRandomValues(new Uint8Array(12));

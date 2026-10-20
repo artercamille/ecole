@@ -8,6 +8,6 @@ const key = await C.subtle.deriveKey({ name: "PBKDF2", salt: b.subarray(0, 16), 
 const o = JSON.parse(new TextDecoder().decode(await C.subtle.decrypt({ name: "AES-GCM", iv: b.subarray(16, 28) }, key, b.subarray(28))));
 mkdirSync(out + "/js", { recursive: true }); mkdirSync(out + "/css", { recursive: true });
 writeFileSync(out + "/css/app.css", o.css);
-["lessons", "questions", "app"].forEach((n, i) => writeFileSync(`${out}/js/${n}.js`, o.js[i]));
+["lessons", "questions", "annales", "app"].forEach((n, i) => writeFileSync(`${out}/js/${n}.js`, o.js[i]));
 writeFileSync(out + "/body.html", o.body);
 console.log("ok");
