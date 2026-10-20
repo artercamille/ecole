@@ -45,7 +45,7 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",s
 <script>
 (async () => {
   const KK = "ecole-key";
-  const raw = await fetch("app.enc", { cache: "no-cache" }).then(r => r.text()).catch(() => null);
+  const raw = await fetch("app.enc?t=" + Date.now(), { cache: "no-store" }).catch(() => null).then(r => r && r.ok ? r : fetch("app.enc")).then(r => r.text()).catch(() => null);
   if (!raw) { document.body.textContent = "Connexion impossible."; return; }
   const b = Uint8Array.from(atob(raw.trim()), c => c.charCodeAt(0));
   const salt = b.slice(0, 16), iv = b.slice(16, 28), ct = b.slice(28);
