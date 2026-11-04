@@ -4,6 +4,13 @@ import { readFileSync, writeFileSync, existsSync } from "fs";
 import { webcrypto as C } from "crypto";
 const src = process.argv[2], pass = process.env.ECOLE_PASS;
 if (!src || !pass) { console.error("usage: ECOLE_PASS=... node tools/build.mjs <src>"); process.exit(1); }
+// Contrôle qualité : refuse de construire si une question teste une notion absente des leçons
+if (existsSync(src + "/tools/check.mjs")) {
+  const { check } = await import(new URL("file://" + (src.startsWith("/") ? src : process.cwd() + "/" + src) + "/tools/check.mjs"));
+  const r = check(src);
+  console.log(`contrôle : ${r.total} questions, ${r.bad.length} notion(s) absente(s) du cours`);
+  if (r.bad.length) { r.bad.forEach(b => console.error("  ✗ " + b)); console.error("Build refusé : ajoute la notion dans la leçon, ou relis puis valide (node tools/check.mjs <src> --valider)."); process.exit(1); }
+}
 const html = readFileSync(src + "/index.html", "utf8");
 const body = html.slice(html.indexOf("<body>") + 6, html.indexOf("<script src")).trim();
 const bundle = JSON.stringify({
